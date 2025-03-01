@@ -33,6 +33,7 @@ export function PlanForm({ onSuccess }: PlanFormProps) {
       title: "",
       description: "",
       category: "",
+      dueDate: null,
       priority: "medium",
       status: "not-started",
     },
@@ -175,16 +176,16 @@ export function PlanForm({ onSuccess }: PlanFormProps) {
                     defaultValue={field.value}
                     className="flex space-x-4"
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="low" id="low" />
+                    <div className="flex items-center space-x-2  text-gray-700">
+                      <RadioGroupItem value="low" id="low"className="text-gray-700" />
                       <Label htmlFor="low">Low</Label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="medium" id="medium" />
+                    <div className="flex items-center space-x-2  text-gray-700">
+                      <RadioGroupItem value="medium" id="medium" className="text-gray-700" />
                       <Label htmlFor="medium">Medium</Label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="high" id="high" />
+                    <div className="flex items-center space-x-2 text-gray-700">
+                      <RadioGroupItem value="high" id="high"className="text-gray-700" />
                       <Label htmlFor="high">High</Label>
                     </div>
                   </RadioGroup>

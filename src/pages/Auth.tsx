@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -109,7 +108,7 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Loading..." : "Sign In"}
                 </Button>
-              </form>
+                </form>
             </Form>
           ) : (
             <Form {...signUpForm}>
@@ -121,7 +120,7 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" type="text" autoComplete="name" {...field} />
+                        <Input placeholder="Swathi" type="text" autoComplete="name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,7 +134,9 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="name@example.com" type="email" autoComplete="email" {...field} />
+                        <Input placeholder="name@example.com" type="email" autoComplete="email"  disabled={false} // Ensure it's not disabled
+                          readOnly={false} // Ensure it's not readOnly 
+                        {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,8 +189,8 @@ const Auth = () => {
           )}
           
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={toggleAuthMode} className="text-sm">
-              {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+            <Button variant="link" onClick={toggleAuthMode} className="text-sm text-grey-700">
+              {isSignIn ? "New User? Sign up" : "Existing User? Sign in"}
             </Button>
           </div>
         </motion.div>

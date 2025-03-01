@@ -18,7 +18,7 @@ export const signInSchema = z.object({
 });
 
 export const signUpSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2,"Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
   password: z
     .string()
@@ -34,7 +34,7 @@ export const signUpSchema = z.object({
 });
 
 export const studyPlanSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
+  title: z.string().min(1,"Title is required").max(100, "Title must be less than 100 characters"),
   description: z.string().max(500, "Description must be less than 500 characters").optional(),
   category: z.string().min(1, "Category is required"),
   dueDate: z.date().optional(),
