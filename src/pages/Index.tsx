@@ -30,49 +30,71 @@ const Index = () => {
       <section className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-background to-muted z-0" />
         
-        <div className="relative z-10 container mx-auto px-4 pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col items-center text-center">
-          <motion.h1 
-            className="text-4xl md:text-6xl font-bold tracking-tight max-w-3xl"
+        <div className="relative z-10 container mx-auto px-4 pt-32 pb-16 md:pt-40 md:pb-24 flex flex-col md:flex-row items-center text-center md:text-left gap-8">
+          <motion.div 
+            className="md:w-1/2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Your study plan, <span className="text-foreground/80">simplified.</span>
-          </motion.h1>
-          
-          <motion.p 
-            className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            An elegant, intuitive study planner that helps you organize your learning journey
-            and stay on track with your educational goals.
-          </motion.p>
-          
-          <motion.div 
-            className="mt-8 flex flex-col sm:flex-row gap-4 w-full justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Link to={user ? "/dashboard" : "/auth"}>
-              <Button size="lg" className="rounded-full px-8 hover-lift">
-                {user ? "Go to Dashboard" : "Get Started"}
-              </Button>
-            </Link>
-            {!user && (
-              <Link to="/auth">
-                <Button size="lg" variant="outline" className="rounded-full px-8 hover-lift">
-                  Sign In
+            <motion.h1 
+              className="text-4xl md:text-6xl font-bold tracking-tight max-w-3xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Your study plan, <span className="text-foreground/80">simplified.</span>
+            </motion.h1>
+            
+            <motion.p 
+              className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              An elegant, intuitive study planner that helps you organize your learning journey
+              and stay on track with your educational goals.
+            </motion.p>
+            
+            <motion.div 
+              className="mt-8 flex flex-col sm:flex-row gap-4 w-full justify-center md:justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Link to={user ? "/dashboard" : "/auth"}>
+                <Button size="lg" className="rounded-full px-8 hover-lift">
+                  {user ? "Go to Dashboard" : "Get Started"}
                 </Button>
               </Link>
-            )}
+              {!user && (
+                <Link to="/auth">
+                  <Button size="lg" variant="outline" className="rounded-full px-8 hover-lift">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+            </motion.div>
+          </motion.div>
+          
+          <motion.div 
+            className="md:w-1/2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="glass-card rounded-2xl overflow-hidden shadow-md">
+              <img 
+                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2022&q=80" 
+                alt="Student studying" 
+                className="w-full h-auto object-cover rounded-2xl"
+              />
+            </div>
           </motion.div>
         </div>
       </section>
       
-      <section className="bg-secondary/50 py-16 md:py-24">
+      <section className="bg-secondary/50 dark:bg-secondary/20 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <motion.h2 
             className="text-3xl font-bold text-center mb-12"
@@ -136,16 +158,17 @@ const Index = () => {
             viewport={{ once: true }}
           >
             <div className="glass-card rounded-2xl overflow-hidden shadow-sm">
-              {/* Placeholder for app screenshot/illustration */}
-              <div className="bg-muted aspect-video flex items-center justify-center">
-                <p className="text-muted-foreground">Study Planner Dashboard</p>
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1948&q=80" 
+                alt="Study planner interface" 
+                className="w-full h-auto"
+              />
             </div>
           </motion.div>
         </div>
       </section>
       
-      <footer className="bg-secondary/50 py-8">
+      <footer className="bg-secondary/50 dark:bg-secondary/20 py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© 2023 Study Planner. All rights reserved.</p>
           <p className="mt-2">A minimalist study planning tool for organized learners.</p>
