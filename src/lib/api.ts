@@ -11,14 +11,17 @@ export type StudyPlan = StudyPlanFormValues & {
 
 // Create a new study plan
 export const createStudyPlan = async (plan: StudyPlanFormValues): Promise<StudyPlan> => {
-  const user = supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
+  
+  if (!userData.user) {
+    throw new Error("You must be logged in to create a study plan");
+  }
+  
   const { data, error } = await supabase
     .from('study_plans')
     .insert({
       ...plan,
-      user_id: (await user).data.user?.id,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      user_id: userData.user.id,
     })
     .select()
     .single();
@@ -29,11 +32,16 @@ export const createStudyPlan = async (plan: StudyPlanFormValues): Promise<StudyP
 
 // Get all study plans for the current user
 export const getStudyPlans = async (): Promise<StudyPlan[]> => {
-  const user = supabase.auth.getUser();
+  const { data: userData } = await supabase.auth.getUser();
+  
+  if (!userData.user) {
+    throw new Error("You must be logged in to view study plans");
+  }
+  
   const { data, error } = await supabase
     .from('study_plans')
     .select('*')
-    .eq('user_id', (await user).data.user?.id)
+    .eq('user_id', userData.user.id)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
@@ -54,6 +62,12 @@ export const getStudyPlan = async (id: string): Promise<StudyPlan> => {
 
 // Update a study plan
 export const updateStudyPlan = async (id: string, plan: Partial<StudyPlanFormValues>): Promise<StudyPlan> => {
+  const { data: userData } = await supabase.auth.getUser();
+  
+  if (!userData.user) {
+    throw new Error("You must be logged in to update a study plan");
+  }
+  
   const { data, error } = await supabase
     .from('study_plans')
     .update({
@@ -70,6 +84,12 @@ export const updateStudyPlan = async (id: string, plan: Partial<StudyPlanFormVal
 
 // Delete a study plan
 export const deleteStudyPlan = async (id: string): Promise<void> => {
+  const { data: userData } = await supabase.auth.getUser();
+  
+  if (!userData.user) {
+    throw new Error("You must be logged in to delete a study plan");
+  }
+  
   const { error } = await supabase
     .from('study_plans')
     .delete()

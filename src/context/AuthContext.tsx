@@ -101,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email, 
         password,
         options: {
-          data: { full_name: name }
+          data: { name }
         }
       });
       if (error) throw error;
@@ -110,6 +110,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "Registration successful. Please check your email to confirm your account.",
         variant: "default",
       });
+      
+      // For development purposes, you might want to sign in right away
+      // Uncomment the following if you want to auto sign in after registration
+      // await signIn(email, password);
     } catch (error: any) {
       toast({
         title: "Error",

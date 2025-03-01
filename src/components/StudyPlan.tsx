@@ -3,11 +3,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { StudyPlan as StudyPlanType } from "@/lib/api";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
-import { useState } from "react";
-import { updateStudyPlanStatus, deleteStudyPlan } from "@/lib/api";
+import { useState, useEffect } from "react";
+import { updateStudyPlanStatus, deleteStudyPlan, updateStudyPlan } from "@/lib/api";
 import { toast } from "@/components/ui/use-toast";
+import { Check } from "lucide-react";
 
 interface StudyPlanProps {
   plan: StudyPlanType;
@@ -16,6 +17,28 @@ interface StudyPlanProps {
 
 export function StudyPlan({ plan, onUpdate }: StudyPlanProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [showUpdateEffect, setShowUpdateEffect] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(
+    plan.updated_at ? new Date(plan.updated_at) : null
+  );
+
+  // Check if plan was recently updated
+  useEffect(() => {
+    const updatedAt = new Date(plan.updated_at);
+    
+    // If we have a previous update timestamp and it's different
+    if (lastUpdated && updatedAt.getTime() !== lastUpdated.getTime()) {
+      setShowUpdateEffect(true);
+      const timer = setTimeout(() => {
+        setShowUpdateEffect(false);
+      }, 3000); // Show effect for 3 seconds
+      
+      return () => clearTimeout(timer);
+    }
+    
+    // Update the last updated timestamp
+    setLastUpdated(updatedAt);
+  }, [plan.updated_at, lastUpdated]);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -93,11 +116,24 @@ export function StudyPlan({ plan, onUpdate }: StudyPlanProps) {
       transition={{ duration: 0.3 }}
       className="h-full"
     >
-      <Card className="h-full flex flex-col glass-card overflow-hidden">
+      <Card className={`h-full flex flex-col glass-card overflow-hidden relative ${showUpdateEffect ? 'ring-2 ring-primary' : ''}`}>
+        {showUpdateEffect && (
+          <motion.div 
+            className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+          >
+            <Check size={16} />
+          </motion.div>
+        )}
+        
         <CardHeader>
           <div className="flex justify-between items-start gap-4">
             <div>
-              <CardTitle className="text-xl line-clamp-1">{plan.title}</CardTitle>
+              <CardTitle className={`text-xl line-clamp-1 ${plan.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
+                {plan.title}
+              </CardTitle>
               {plan.dueDate && (
                 <CardDescription className="mt-1">
                   Due: {format(new Date(plan.dueDate), "PPP")}
@@ -115,12 +151,17 @@ export function StudyPlan({ plan, onUpdate }: StudyPlanProps) {
           </div>
         </CardHeader>
         <CardContent className="flex-grow">
-          <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-3">
+          <p className={`text-sm text-gray-500 dark:text-gray-400 line-clamp-3 ${plan.status === 'completed' ? 'line-through' : ''}`}>
             {plan.description || "No description provided."}
           </p>
           <Badge variant="outline" className="mt-4 capitalize">
             {plan.category}
           </Badge>
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Last updated: {format(new Date(lastUpdated), "PPP p")}
+            </p>
+          )}
         </CardContent>
         <CardFooter className="flex justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-2 items-center">
