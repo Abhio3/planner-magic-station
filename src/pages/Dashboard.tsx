@@ -92,8 +92,7 @@ const Dashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
-              Welcome back, {user?.email?.split('@')[0] || 'User'}
-            </motion.p>
+              Welcome back, {user?.user_metadata?.name || user?.email?.split('@')[0] || 'User'} </motion.p>
           </div>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}

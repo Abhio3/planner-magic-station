@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, signUpSchema, SignInFormValues, SignUpFormValues } from "@/lib/validators";
+import { signInSchema, signUpSchema } from "@/lib/validators";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,60 +12,25 @@ const Auth = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const { signIn, signUp, loading } = useAuth();
   
-  // Create separate form instances
-  const signInForm = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+  // Use a single form instance based on the current mode
+  const form = useForm({
+    resolver: zodResolver(isSignIn ? signInSchema : signUpSchema),
+    defaultValues: isSignIn 
+      ? { email: "", password: "" }
+      : { name: "", email: "", password: "", confirmPassword: "" },
   });
 
-  const signUpForm = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  const onSignIn = async (data: SignInFormValues) => {
-    await signIn(data.email, data.password);
-  };
-
-  const onSignUp = async (data: SignUpFormValues) => {
-    await signUp(data.email, data.password, data.name);
+  const onSubmit = async (data) => {
+    if (isSignIn) {
+      await signIn(data.email, data.password);
+    } else {
+      await signUp(data.email, data.password, data.name);
+    }
   };
 
   const toggleAuthMode = () => {
     setIsSignIn(!isSignIn);
-    signInForm.reset();
-    signUpForm.reset();
-  };
-
-  // Helper function to create a basic input field
-  const renderField = (form: any, name: string, label: string, type: string, placeholder: string) => {
-    return (
-      <FormField
-        control={form.control}
-        name={name}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{label}</FormLabel>
-            <FormControl>
-              <Input 
-                type={type} 
-                placeholder={placeholder}
-                {...field} 
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    );
+    form.reset();
   };
 
   return (
@@ -83,34 +47,92 @@ const Auth = () => {
             </p>
           </div>
           
-          {isSignIn ? (
-            <Form {...signInForm}>
-              <form onSubmit={signInForm.handleSubmit(onSignIn)} className="space-y-6">
-                {renderField(signInForm, "email", "Email", "email", "name@example.com")}
-                {renderField(signInForm, "password", "Password", "password", "••••••••")}
-                
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Loading..." : "Sign In"}
-                </Button>
-              </form>
-            </Form>
-          ) : (
-            <Form {...signUpForm}>
-              <form onSubmit={signUpForm.handleSubmit(onSignUp)} className="space-y-6">
-                {renderField(signUpForm, "name", "Full Name", "text", "Your name")}
-                {renderField(signUpForm, "email", "Email", "email", "name@example.com")}
-                {renderField(signUpForm, "password", "Password", "password", "••••••••")}
-                {renderField(signUpForm, "confirmPassword", "Confirm Password", "password", "••••••••")}
-                
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Loading..." : "Sign Up"}
-                </Button>
-              </form>
-            </Form>
-          )}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {!isSignIn && (
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="text" 
+                          placeholder="Your name"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="email" 
+                        placeholder="name@example.com"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="password" 
+                        placeholder="••••••••"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              {!isSignIn && (
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="password" 
+                          placeholder="••••••••"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Loading..." : isSignIn ? "Sign In" : "Sign Up"}
+              </Button>
+            </form>
+          </Form>
           
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={toggleAuthMode} className="text-sm">
+            <Button variant="link" onClick={toggleAuthMode} className="text-sm text-gray-700">
               {isSignIn ? "New User? Sign up" : "Existing User? Sign in"}
             </Button>
           </div>
