@@ -7,13 +7,13 @@ import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 
 const Auth = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const { signIn, signUp, loading } = useAuth();
   
+  // Create separate form instances
   const signInForm = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -46,21 +46,34 @@ const Auth = () => {
     signUpForm.reset();
   };
 
+  // Helper function to create a basic input field
+  const renderField = (form: any, name: string, label: string, type: string, placeholder: string) => {
+    return (
+      <FormField
+        control={form.control}
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{label}</FormLabel>
+            <FormControl>
+              <Input 
+                type={type} 
+                placeholder={placeholder}
+                {...field} 
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col items-center">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <Navbar />
-      <motion.div 
-        className="flex-1 w-full flex flex-col items-center justify-center p-4 pt-24"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div
-          className="glass-card w-full max-w-md p-8 rounded-2xl shadow-sm"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-        >
+      <div className="flex-1 w-full flex flex-col items-center justify-center p-4 pt-24">
+        <div className="w-full max-w-md p-8 rounded-2xl shadow-sm bg-white dark:bg-gray-800">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold tracking-tight">
               {isSignIn ? "Welcome back" : "Create an account"}
@@ -73,37 +86,8 @@ const Auth = () => {
           {isSignIn ? (
             <Form {...signInForm}>
               <form onSubmit={signInForm.handleSubmit(onSignIn)} className="space-y-6">
-                <FormField
-                  control={signInForm.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="name@example.com" type="email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={signInForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="••••••••" 
-                          type="password"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {renderField(signInForm, "email", "Email", "email", "name@example.com")}
+                {renderField(signInForm, "password", "Password", "password", "••••••••")}
                 
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Loading..." : "Sign In"}
@@ -113,73 +97,10 @@ const Auth = () => {
           ) : (
             <Form {...signUpForm}>
               <form onSubmit={signUpForm.handleSubmit(onSignUp)} className="space-y-6">
-                <FormField
-                  control={signUpForm.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your name" type="text" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={signUpForm.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="name@example.com" 
-                          type="email"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={signUpForm.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="••••••••" 
-                          type="password"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={signUpForm.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="••••••••" 
-                          type="password"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {renderField(signUpForm, "name", "Full Name", "text", "Your name")}
+                {renderField(signUpForm, "email", "Email", "email", "name@example.com")}
+                {renderField(signUpForm, "password", "Password", "password", "••••••••")}
+                {renderField(signUpForm, "confirmPassword", "Confirm Password", "password", "••••••••")}
                 
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Loading..." : "Sign Up"}
@@ -189,12 +110,12 @@ const Auth = () => {
           )}
           
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={toggleAuthMode} className="text-sm text-gray-700">
+            <Button variant="link" onClick={toggleAuthMode} className="text-sm">
               {isSignIn ? "New User? Sign up" : "Existing User? Sign in"}
             </Button>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 };
