@@ -35,7 +35,7 @@ export type Database = {
           category: string
           created_at: string | null
           description: string | null
-          due_date: string | null
+          dueDate: string | null
           id: string
           priority: string
           status: string
@@ -47,7 +47,7 @@ export type Database = {
           category: string
           created_at?: string | null
           description?: string | null
-          due_date?: string | null
+          dueDate?: string | null
           id?: string
           priority: string
           status: string

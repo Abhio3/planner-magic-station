@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -108,7 +109,7 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Loading..." : "Sign In"}
                 </Button>
-                </form>
+              </form>
             </Form>
           ) : (
             <Form {...signUpForm}>
@@ -134,9 +135,12 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="name@example.com" type="email" autoComplete="email"  disabled={false} // Ensure it's not disabled
-                          readOnly={false} // Ensure it's not readOnly 
-                        {...field} />
+                        <Input 
+                          placeholder="name@example.com" 
+                          type="email" 
+                          autoComplete="email" 
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
