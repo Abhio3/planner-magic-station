@@ -80,7 +80,7 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="name@example.com" type="email" autoComplete="email" {...field} />
+                        <Input placeholder="name@example.com" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -96,8 +96,7 @@ const Auth = () => {
                       <FormControl>
                         <Input 
                           placeholder="••••••••" 
-                          type="password" 
-                          autoComplete="current-password" 
+                          type="password"
                           {...field} 
                         />
                       </FormControl>
@@ -121,7 +120,7 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Swathi" type="text" autoComplete="name" {...field} />
+                        <Input placeholder="Your name" type="text" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -137,8 +136,7 @@ const Auth = () => {
                       <FormControl>
                         <Input 
                           placeholder="name@example.com" 
-                          type="email" 
-                          autoComplete="email" 
+                          type="email"
                           {...field} 
                         />
                       </FormControl>
@@ -156,8 +154,7 @@ const Auth = () => {
                       <FormControl>
                         <Input 
                           placeholder="••••••••" 
-                          type="password" 
-                          autoComplete="new-password" 
+                          type="password"
                           {...field} 
                         />
                       </FormControl>
@@ -175,8 +172,7 @@ const Auth = () => {
                       <FormControl>
                         <Input 
                           placeholder="••••••••" 
-                          type="password" 
-                          autoComplete="new-password" 
+                          type="password"
                           {...field} 
                         />
                       </FormControl>
@@ -193,7 +189,7 @@ const Auth = () => {
           )}
           
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={toggleAuthMode} className="text-sm text-grey-700">
+            <Button variant="link" onClick={toggleAuthMode} className="text-sm text-gray-700">
               {isSignIn ? "New User? Sign up" : "Existing User? Sign in"}
             </Button>
           </div>
