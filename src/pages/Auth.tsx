@@ -121,12 +121,7 @@ const Auth = () => {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Swathi" 
-                          type="text" 
-                          autoComplete="name" 
-                          {...field} 
-                        />
+                        <Input placeholder="Swathi" type="text" autoComplete="name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -143,7 +138,7 @@ const Auth = () => {
                         <Input 
                           placeholder="name@example.com" 
                           type="email" 
-                          autoComplete="email"
+                          autoComplete="email" 
                           {...field} 
                         />
                       </FormControl>
